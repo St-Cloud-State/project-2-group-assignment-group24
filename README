@@ -15,7 +15,7 @@ warehouse.ui.*	Swing-based GUI implementation — frame, controller, and panel c
 
 From the repository root (WarehouseFSM directory), compile all source files into an output folder named out.
 
-cd WarehouseFSM
+cd WarehouseFSMGUI
 # Compile all Java sources recursively
 Get-ChildItem -Recurse -Filter *.java | ForEach-Object { javac -encoding UTF-8 -d out $_.FullName }
 
@@ -42,7 +42,7 @@ java -cp out warehouse.ui.WarehouseGUIApp
 🧑‍💻 Authors
 Group 24 – Warehouse FSM Project
 
-Yohanes M.
+Yohanes N.
 Owen H.
 Joliage B.
 
