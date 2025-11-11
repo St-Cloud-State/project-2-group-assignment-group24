@@ -1,3 +1,62 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/Six8SJdb)
-[![Open in Codespaces](https://classroom.github.com/assets/launch-codespace-2972f46106e565e64193e422d61a12cf1da4916b45550586e14ef0a7c637dd04.svg)](https://classroom.github.com/open-in-codespaces?assignment_repo_id=21322001)
-Creating GUI-based FSM
+🏭 Warehouse FSM (Finite State Machine)
+
+This project implements a Warehouse Management System using a Finite State Machine (FSM) architecture.
+It supports both console and Swing GUI interfaces for interacting with clients, clerks, and managers.
+
+📁 Project Structure
+
+All source files are organized under WarehouseFSM/src following standard Java package conventions:
+
+Package	Description
+warehouse.*	Core domain classes and FSM console states (clients, products, transactions, etc.)
+warehouse.ui.*	Swing-based GUI implementation — frame, controller, and panel classes for each user role
+
+⚙️ Build Instructions
+
+From the repository root (WarehouseFSM directory), compile all source files into an output folder named out.
+
+cd WarehouseFSMGUI
+# Compile all Java sources recursively
+Get-ChildItem -Recurse -Filter *.java | ForEach-Object { javac -encoding UTF-8 -d out $_.FullName }
+
+
+💡 Tip: You can safely delete any old out folder before compiling to avoid stale class files.
+
+▶️ Running the Application
+1. Console Version
+
+Run the original text-based FSM interface:
+
+java -cp out warehouse.WarehouseFSMApp
+
+2. Swing GUI Version
+
+Launch the graphical interface:
+
+java -cp out WarehouseGUIApp
+
+
+🪶 Note: If the GUI is launched in a headless environment (no display), it will automatically fall back to the console FSM.
+
+
+🧑‍💻 Authors
+Group 24 – Warehouse FSM Project
+
+Yohanes N.
+Owen H.
+Joliage B.
+
+Project developed for CSCI 411 – Database Systems (Fall 2025)
+
+
+🏁 Version
+Phase 2 – Swing GUI Implementation
+
+Includes:
+
+GUI panels for Opening, Clerk, Manager, Client, and Wishlist states
+
+State transitions managed by WarehouseContext
+
+Full parity with the console FSM implementation from Phase 1
+
