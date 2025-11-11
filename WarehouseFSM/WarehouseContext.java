@@ -5,40 +5,44 @@ public class WarehouseContext {
   public static final int CLIENT_STATE  = 1;
   public static final int CLERK_STATE   = 2;
   public static final int MANAGER_STATE = 3;
-  public static final int EXIT_STATE    = 4;
+  public static final int WISHLIST_STATE = 4;
+  public static final int EXIT_STATE    = 5;
 
   public static final int CMD_QUIT_OR_LOGOUT = 0;
   public static final int CMD_CLIENT         = 1;
   public static final int CMD_CLERK          = 2;
   public static final int CMD_MANAGER        = 3;
+  public static final int CMD_WISHLIST       = 4;
 
   private static WarehouseContext singleton;
 
   private final Scanner in = new Scanner(System.in);
   private final Warehouse warehouse;
 
-  private final WarehouseState[] states = new WarehouseState[5];
+  private final WarehouseState[] states = new WarehouseState[6];
   private int currentStateIndex = OPENING_STATE;
 
   private int previousStateIndex = OPENING_STATE;
   private String currentClientId = null;
 
   private final int[][] transitions = new int[][]{
-      /*             QUIT/LOGOUT  CLIENT         CLERK         MANAGER */
-      /* OPENING */ { EXIT_STATE,  CLIENT_STATE,  CLERK_STATE,  MANAGER_STATE },
-      /* CLIENT  */ { -1,          -1,            -1,           -1            },
-      /* CLERK   */ { -1,          CLIENT_STATE,  -1,           -1            },
-      /* MANAGER */ { -1,          -1,            CLERK_STATE,   -1            },
-      /* EXIT    */ { EXIT_STATE,  EXIT_STATE,    EXIT_STATE,    EXIT_STATE    }
+      /*             QUIT/LOGOUT  CLIENT         CLERK         MANAGER       WISHLIST */
+      /* OPENING */ { EXIT_STATE,  CLIENT_STATE,  CLERK_STATE,  MANAGER_STATE, -1             },
+      /* CLIENT  */ { -1,          -1,            -1,           -1,            WISHLIST_STATE },
+      /* CLERK   */ { -1,          CLIENT_STATE,  -1,           -1,            -1             },
+      /* MANAGER */ { -1,          -1,            CLERK_STATE,  -1,            -1             },
+      /* WISHLIST*/ { -1,          CLIENT_STATE,  -1,           -1,            -1             },
+      /* EXIT    */ { EXIT_STATE,  EXIT_STATE,    EXIT_STATE,   EXIT_STATE,    EXIT_STATE     }
   };
 
   private WarehouseContext() {
     this.warehouse = new Warehouse(); 
 
-    states[OPENING_STATE] = new OpeningState(this);
-    states[CLIENT_STATE]  = new ClientMenuState(this);
-    states[CLERK_STATE]   = new ClerkMenuState(this);
-    states[MANAGER_STATE] = new ManagerMenuState(this);
+    states[OPENING_STATE]  = new OpeningState(this);
+    states[CLIENT_STATE]   = new ClientMenuState(this);
+    states[CLERK_STATE]    = new ClerkMenuState(this);
+    states[MANAGER_STATE]  = new ManagerMenuState(this);
+    states[WISHLIST_STATE] = new WishlistState(this);
   }
 
   public static WarehouseContext instance() {
@@ -66,7 +70,7 @@ public class WarehouseContext {
   }
 
   public void logout() {
-    if (currentStateIndex == CLIENT_STATE) {
+    if (currentStateIndex == CLIENT_STATE || currentStateIndex == WISHLIST_STATE) {
       setState(previousStateIndex);
       currentClientId = null;
     } else if (currentStateIndex == CLERK_STATE || currentStateIndex == MANAGER_STATE) {

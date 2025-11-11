@@ -16,9 +16,7 @@ public class ClientMenuState implements WarehouseState {
       System.out.println("1) Show client details");
       System.out.println("2) Show list of products (with price)");
       System.out.println("3) Show client transactions");
-      System.out.println("4) Add item to wishlist");
-      System.out.println("5) Display wishlist");
-      System.out.println("6) Place order (buy everything in wishlist)");
+      System.out.println("4) Wishlist operations");
       System.out.println("0) Logout");
 
       int choice = ctx.promptInt("> ");
@@ -27,9 +25,7 @@ public class ClientMenuState implements WarehouseState {
         case 1: showClientDetails(); break;
         case 2: showProducts(); break;
         case 3: showTransactions(); break;
-        case 4: addWishlistItem(); break;
-        case 5: displayWishlist(); break;
-        case 6: placeOrder(); break;
+        case 4: openWishlistState(); break;
         default: System.out.println("Invalid option.");
       }
     }
@@ -62,33 +58,9 @@ public class ClientMenuState implements WarehouseState {
     }
   }
 
-  private void addWishlistItem() {
+  private void openWishlistState() {
     String cid = currentClientIdOrWarn(); if (cid == null) return;
-    String pid = ctx.promptLine("Product ID: ");
-    int qty = ctx.promptInt("Quantity: ");
-    try {
-      ctx.warehouse().addOrUpdateWishlistItem(cid, pid, qty);
-      System.out.println("OK");
-    } catch (Exception e) {
-      System.out.println("Failed: " + e.getMessage());
-    }
-  }
-
-  private void displayWishlist() {
-    String cid = currentClientIdOrWarn(); if (cid == null) return;
-    System.out.println("== Wishlist for " + cid + " ==");
-    List<String> rows = ctx.warehouse().getWishlistForClient(cid);
-    if (rows == null || rows.isEmpty()) { System.out.println("(empty)"); return; }
-    for (String row : rows) System.out.println(row);
-  }
-
-  private void placeOrder() {
-    String cid = currentClientIdOrWarn(); if (cid == null) return;
-    try {
-      ctx.warehouse().placeOrder(cid);
-      System.out.println("Order processed for " + cid);
-    } catch (Exception e) {
-      System.out.println("Failed: " + e.getMessage());
-    }
+    int ns = ctx.getNextState(WarehouseContext.CLIENT_STATE, WarehouseContext.CMD_WISHLIST);
+    if (ns >= 0) ctx.setState(ns);
   }
 }
